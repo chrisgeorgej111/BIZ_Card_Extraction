@@ -40,4 +40,4 @@ Once user uploads a business card, the text present in the card is extracted by 
 
 The text of the Buisness card is extracted using python regular expression by defining a function and displayed it as dataframe in streamlit in an organized Manner.
 
-On Clicking Upload to Database Button the data gets stored in the MySQL Database. 
+On Clicking Upload to Database Button the data gets stored in the MySQL Database. Also the User can read the data from mysql,updata and delete the data of selected of business card in the streamlit itself.
