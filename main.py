@@ -211,6 +211,74 @@ if upload is not None:
             db.commit()
 
             st.success("#### Uploaded to database successfully!")
+            
+    col1,col2,col3,col4=st.columns(4)
+
+    try:
+        with col1:
+
+            mycursor.execute("SELECT Card_Holder From card_data")
+            result = mycursor.fetchall()
+            name= {}
+            for i in result:
+                name[i[0]] = i[0]
+            select = st.selectbox("Select a card holder name to update", list(name.keys()))
+
+            mycursor.execute(
+                    f"SELECT Card_Holder,Designation,Phone_number,Email_id,Website_URL,Area,City,State,Pincode,Company_Name from card_data WHERE Card_Holder='{select}'")
+
+            result = mycursor.fetchone()
+            Card_Holder = st.text_input("Card_Holder", result[0])
+            Designation = st.text_input("Designation", result[1])
+            Phone_number = st.text_input("Mobile_Number", result[2])
+            Email_id = st.text_input("Email_id", result[3])
+            Website_URL = st.text_input("Website", result[4])
+            Area = st.text_input("Area", result[5])
+            City = st.text_input("City", result[6])
+            State = st.text_input("State", result[7])
+            Pincode = st.text_input("Pin_Code", result[8])
+            Company_Name = st.text_input("Company_Name", result[9])
+
+        with col2:
+            if st.button('UPDATE'):
+                mycursor.execute(
+                """UPDATE card_data SET Card_Holder=%s,Designation=%s,Phone_number=%s,Email_id=%s,Website_URL=%s,Area=%s,City=%s,State=%s,Pincode=%s,Company_Name=%s WHERE Card_Holder=%s""",
+                (Card_Holder, Designation, Phone_number, Email_id, Website_URL, Area, City, State,Pincode,Company_Name, select))
+
+                db.commit()
+                st.success("DB updated successfully!!")
+
+        with col3:
+            if st.button('Delete'):
+                mycursor.execute(f"DELETE FROM card_data WHERE card_holder='{select}'")
+                db.commit()
+                st.success("Business card information deleted from database.")
+
+        with col4:
+
+            if st.button("View Final data"):
+                mycursor.execute(
+                    "SELECT  Card_Holder, Designation, Phone_number, Email_id, Website_URL, Area, City, State,Pincode,Company_Name FROM card_data")
+                updated_df = pd.DataFrame(mycursor.fetchall(),
+                                          columns=["Card_Holder", "Designation", "Phone_Number",
+                                                   "Email", "Website", "Area", "City", "State", "Pincode",
+                                                   "Company_Name"])
+                st.write(updated_df)
+
+    except:
+        st.warning('There is no data in the database')
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
